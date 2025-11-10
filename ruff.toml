@@ -1,0 +1,16 @@
+line-length = 100
+
+exclude = [
+    ".venv",
+]
+
+[lint]
+select = ["ALL"]
+ignore = [
+    "D100"
+]
+
+[format]
+quote-style = "double"
+indent-style = "space"
+docstring-code-format = true
