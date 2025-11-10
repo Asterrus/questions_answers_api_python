@@ -4,4 +4,9 @@ version = "0.1.0"
 description = "API-сервис для вопросов и ответов. Python"
 readme = "README.md"
 requires-python = ">=3.13"
-dependencies = []
+dependencies = [
+    "alembic>=1.17.1",
+    "fastapi[standard]>=0.121.1",
+    "pytest>=9.0.0",
+    "sqlalchemy>=2.0.44",
+]
