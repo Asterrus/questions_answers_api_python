@@ -4,8 +4,12 @@ from uuid import UUID
 from app.domain.entities.question import QuestionEntity
 
 
-class QuestionReader(Protocol):
-    async def get_all(self) -> list[QuestionEntity]: ...
+class QuestionListReader(Protocol):
+    async def get_list(self) -> list[QuestionEntity]: ...
+
+
+class QuestionByIdReader(Protocol):
+    async def get_by_id(self, id: UUID) -> QuestionEntity | None: ...
 
 
 class QuestionWriter(Protocol):
@@ -13,6 +17,7 @@ class QuestionWriter(Protocol):
 
 
 class QuestionRepository(
-    QuestionReader,
+    QuestionByIdReader,
+    QuestionListReader,
     QuestionWriter,
 ): ...

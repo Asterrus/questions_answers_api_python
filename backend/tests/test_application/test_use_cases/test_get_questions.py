@@ -2,21 +2,21 @@ from uuid import uuid4
 
 import pytest
 
-from app.application.dtos.question import QuestionResponseDTO
+from app.application.dtos.question import QuestionsListResponseDTO
 from app.application.use_cases.get_questions import GetQuestionsUseCase
 from app.domain.entities.question import QuestionEntity
 
 
 class FakeQuestionReader:
-    async def get_all(self):
+    async def get_list(self):
         return [
             QuestionEntity(id=uuid4(), text="What is your name?"),
         ]
 
 
 class FakeQuestionMapper:
-    def to_dto(self, entity: QuestionEntity) -> QuestionResponseDTO:
-        return QuestionResponseDTO(id=entity.id, text=entity.text)
+    def to_dto(self, entity: QuestionEntity) -> QuestionsListResponseDTO:
+        return QuestionsListResponseDTO(id=entity.id, text=entity.text)
 
 
 class TestGetQuestions:
@@ -30,4 +30,4 @@ class TestGetQuestions:
         )
         result = await use_case.execute()
         assert len(result) == 1
-        assert isinstance(result[0], QuestionResponseDTO)
+        assert isinstance(result[0], QuestionsListResponseDTO)

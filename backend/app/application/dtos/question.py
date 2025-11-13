@@ -4,9 +4,30 @@ from uuid import UUID
 
 
 @dataclass(frozen=True, slots=True)
-class QuestionResponseDTO:
+class QuestionsListResponseDTO:
     """DTO for retrieving questions."""
 
     id: UUID
     text: str
     created_at: datetime = field(default_factory=lambda: datetime.now(UTC))
+
+
+@dataclass(frozen=True, slots=True)
+class AnswerResponseDTO:
+    """DTO for retrieving answers."""
+
+    id: UUID
+    question_id: UUID
+    user_id: UUID
+    text: str
+    created_at: datetime = field(default_factory=lambda: datetime.now(UTC))
+
+
+@dataclass(frozen=True, slots=True)
+class QuestionWithAnswersResponseDTO:
+    """DTO for retrieving question with answers."""
+
+    id: UUID
+    text: str
+    created_at: datetime = field(default_factory=lambda: datetime.now(UTC))
+    answers: list[AnswerResponseDTO] = field(default_factory=list)
