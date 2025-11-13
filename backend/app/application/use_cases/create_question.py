@@ -1,8 +1,12 @@
 from dataclasses import dataclass
+from typing import Protocol
 from uuid import UUID, uuid4
 
-from app.application.interfaces.repositories.question_repository import QuestionWriter
 from app.domain.entities.question import QuestionEntity
+
+
+class QuestionWriter(Protocol):
+    async def save(self, entity: QuestionEntity) -> UUID: ...
 
 
 @dataclass(frozen=True)

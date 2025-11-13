@@ -1,12 +1,21 @@
 from dataclasses import dataclass
+from typing import Protocol
 from uuid import UUID
 
-from app.application.dtos.question import QuestionsListResponseDTO, QuestionWithAnswersResponseDTO
+from app.application.dtos.question import QuestionWithAnswersResponseDTO
 from app.application.interfaces.mappers import (
     QuestionWithAnswersEntityToDtoMapper,
 )
-from app.application.interfaces.repositories.answer_repository import AnswersByQuestionIdReader
-from app.application.interfaces.repositories.question_repository import QuestionByIdReader
+from app.domain.entities.answer import AnswerEntity
+from app.domain.entities.question import QuestionEntity
+
+
+class QuestionByIdReader(Protocol):
+    async def get_by_id(self, id: UUID) -> QuestionEntity | None: ...
+
+
+class AnswersByQuestionIdReader(Protocol):
+    async def get_by_question_id(self, id: UUID) -> list[AnswerEntity]: ...
 
 
 @dataclass(frozen=True, slots=True)

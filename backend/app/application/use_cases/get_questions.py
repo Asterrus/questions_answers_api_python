@@ -1,8 +1,13 @@
 from dataclasses import dataclass
+from typing import Protocol
 
 from app.application.dtos.question import QuestionsListResponseDTO
 from app.application.interfaces.mappers import QuestionEntityToDtoMapper
-from app.application.interfaces.repositories.question_repository import QuestionListReader
+from app.domain.entities.question import QuestionEntity
+
+
+class QuestionListReader(Protocol):
+    async def get_list(self) -> list[QuestionEntity]: ...
 
 
 @dataclass(frozen=True, slots=True)
