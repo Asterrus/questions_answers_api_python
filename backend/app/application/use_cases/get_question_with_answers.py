@@ -2,12 +2,16 @@ from dataclasses import dataclass
 from typing import Protocol
 from uuid import UUID
 
+import structlog
+
 from app.application.dtos.question import QuestionWithAnswersResponseDTO
 from app.application.interfaces.mappers import (
     QuestionWithAnswersEntityToDtoMapper,
 )
 from app.domain.entities.answer import AnswerEntity
 from app.domain.entities.question import QuestionEntity
+
+logger = structlog.get_logger(__name__)
 
 
 class QuestionByIdReader(Protocol):
@@ -25,12 +29,14 @@ class GetQuestionWithAnswersUseCase:
     answer_repository: AnswersByQuestionIdReader
 
     async def execute(self, question_id: UUID) -> QuestionWithAnswersResponseDTO | None:
+        logger.info("Getting question with answers", question_id=question_id)
         question = await self.question_repository.get_by_id(question_id)
         if not question:
+            logger.warning("Question not found", question_id=question_id)
             return None
 
         answers = await self.answer_repository.get_by_question_id(question_id)
-
+        logger.info("Question with answers retrieved", question_id=question_id)
         return self.question_mapper.to_dto(
             question=question,
             answers=answers,
