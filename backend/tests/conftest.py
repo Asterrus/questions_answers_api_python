@@ -33,13 +33,13 @@ async def prepare_database(engine):
         await conn.run_sync(mapper_registry.metadata.drop_all)
 
 
-@pytest_asyncio.fixture(scope="session")
+@pytest_asyncio.fixture
 async def session(engine: AsyncEngine):
     Session = get_session_factory(engine)
-    async with engine.connect() as conn:
-        transaction = await conn.begin()
-        async with Session(bind=conn) as s:
-            try:
-                yield s
-            finally:
+    async with Session() as s:
+        transaction = await s.begin()
+        try:
+            yield s
+        finally:
+            if transaction.is_active:
                 await transaction.rollback()

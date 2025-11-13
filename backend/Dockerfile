@@ -22,14 +22,19 @@ RUN --mount=type=cache,target=/root/.cache/uv \
 
 ENV PYTHONPATH=/app
 
-# COPY ./scripts /app/scripts
-
 COPY ./pyproject.toml ./uv.lock /app/
 
 COPY ./app /app/app
 COPY ./tests /app/tests
+COPY ./alembic /app/alembic
+COPY ./alembic.ini /app/alembic.ini
+COPY ./scripts /app/scripts
 
 RUN --mount=type=cache,target=/root/.cache/uv \
     uv sync
 
+RUN chmod +x /app/scripts/entrypoint.sh
+RUN chmod +x /app/scripts/run_migrations.py
+
+ENTRYPOINT ["/app/scripts/entrypoint.sh"]
 CMD ["fastapi", "run", "--workers", "4", "app/main.py"]
