@@ -23,4 +23,3 @@ class QuestionDbMapper:
     def update_model_from_entity(self, model: QuestionModel, entity: QuestionEntity) -> None:
         model.text = entity.text
         model.created_at = entity.created_at
-

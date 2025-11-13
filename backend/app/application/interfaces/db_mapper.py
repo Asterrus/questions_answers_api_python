@@ -1,7 +1,5 @@
 from abc import abstractmethod
-from typing import Protocol, Type, TypeVar
-
-from pydantic import BaseModel
+from typing import Protocol, TypeVar
 
 T = TypeVar("T", contravariant=True)
 

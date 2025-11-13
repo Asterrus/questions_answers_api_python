@@ -1,10 +1,9 @@
 import os
-from collections.abc import AsyncGenerator
 
 import pytest
 import pytest_asyncio
 from dotenv import load_dotenv
-from sqlalchemy.ext.asyncio import AsyncConnection, AsyncEngine, AsyncSession, AsyncTransaction
+from sqlalchemy.ext.asyncio import AsyncEngine
 
 from app.application.interfaces.uow import UnitOfWorkProtocol
 from app.infrastructure.db.models.answer import mapper_registry

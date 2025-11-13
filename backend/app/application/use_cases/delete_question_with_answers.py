@@ -14,9 +14,7 @@ logger = structlog.get_logger(__name__)
 
 
 class QuestionWithAnswersDeleter(Protocol):
-    async def delete(
-        self, id: UUID
-    ) -> tuple[QuestionEntity | None, list[AnswerEntity]]: ...
+    async def delete(self, id: UUID) -> tuple[QuestionEntity | None, list[AnswerEntity]]: ...
 
 
 @dataclass(frozen=True, slots=True)
@@ -28,9 +26,7 @@ class DeleteQuestionWithAnswersUseCase:
     async def execute(self, question_id: UUID) -> QuestionWithAnswersResponseDTO | None:
         logger.info("Deleting question with answers", question_id=question_id)
         async with self.uow:
-            del_question, del_answers = await self.question_repository.delete(
-                question_id
-            )
+            del_question, del_answers = await self.question_repository.delete(question_id)
             await self.uow.commit()
         if not del_question:
             logger.warning("Question not found for deletion", question_id=question_id)
