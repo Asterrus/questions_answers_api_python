@@ -20,7 +20,7 @@ class QuestionByIdReader(Protocol):
 
 
 class AnswersByQuestionIdReader(Protocol):
-    async def get_by_question_id(self, id: UUID) -> list[AnswerEntity]: ...
+    async def get_by_question_id(self, question_id: UUID) -> list[AnswerEntity]: ...
 
 
 @dataclass(frozen=True, slots=True)

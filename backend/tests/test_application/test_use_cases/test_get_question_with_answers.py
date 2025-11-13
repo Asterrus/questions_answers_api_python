@@ -24,7 +24,7 @@ class FakeAnswersByQuestionIdReader:
     def __init__(self, answers: list[AnswerEntity]):
         self.answers = answers
 
-    async def get_by_question_id(self, id: UUID) -> list[AnswerEntity]:
+    async def get_by_question_id(self, question_id: UUID) -> list[AnswerEntity]:
         return self.answers
 
 

@@ -1,13 +1,17 @@
+from __future__ import annotations
+
 from datetime import UTC, datetime
+from typing import TYPE_CHECKING
 from uuid import UUID
 
 from sqlalchemy import DateTime, Text, func
 from sqlalchemy.dialects.postgresql import UUID as PGUUID
-from sqlalchemy.orm import Mapped, mapped_column, registry, relationship
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from app.infrastructure.db.models.answer import AnswerModel
+from app.infrastructure.db.models.mapper import mapper_registry
 
-mapper_registry = registry()
+if TYPE_CHECKING:
+    from app.infrastructure.db.models.answer import AnswerModel
 
 
 @mapper_registry.mapped

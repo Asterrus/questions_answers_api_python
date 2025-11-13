@@ -13,7 +13,7 @@ class FakeAnswerWriter:
     def __init__(self):
         self.saved_answers = []
 
-    async def save(self, entity: AnswerEntity) -> UUID:
+    async def add(self, entity: AnswerEntity) -> UUID:
         self.saved_answers.append(entity)
         return entity.id
 

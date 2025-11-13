@@ -1,0 +1,26 @@
+from dataclasses import dataclass
+
+from app.domain.entities.question import QuestionEntity
+from app.infrastructure.db.models.question import QuestionModel
+
+
+@dataclass(frozen=True, slots=True)
+class QuestionDbMapper:
+    def to_entity(self, model: QuestionModel) -> QuestionEntity:
+        return QuestionEntity(
+            id=model.id,
+            text=model.text,
+            created_at=model.created_at,
+        )
+
+    def to_model(self, entity: QuestionEntity) -> QuestionModel:
+        return QuestionModel(
+            id=entity.id,
+            text=entity.text,
+            created_at=entity.created_at,
+        )
+
+    def update_model_from_entity(self, model: QuestionModel, entity: QuestionEntity) -> None:
+        model.text = entity.text
+        model.created_at = entity.created_at
+

@@ -1,11 +1,17 @@
+from __future__ import annotations
+
 from datetime import UTC, datetime
+from typing import TYPE_CHECKING
 from uuid import UUID
 
 from sqlalchemy import DateTime, ForeignKey, Text, func
 from sqlalchemy.dialects.postgresql import UUID as PGUUID
-from sqlalchemy.orm import Mapped, mapped_column, registry
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-mapper_registry = registry()
+from app.infrastructure.db.models.mapper import mapper_registry
+
+if TYPE_CHECKING:
+    from app.infrastructure.db.models.question import QuestionModel
 
 
 @mapper_registry.mapped
@@ -47,6 +53,9 @@ class AnswerModel:
         nullable=False,
         default=lambda: datetime.now(UTC),
         server_default=func.now(),
+    )
+    question: Mapped[QuestionModel] = relationship(
+        back_populates="answers",
     )
 
     def __repr__(self) -> str:

@@ -13,7 +13,7 @@ logger = structlog.get_logger(__name__)
 
 
 class AnswerWriter(Protocol):
-    async def save(self, entity: AnswerEntity) -> UUID: ...
+    async def add(self, entity: AnswerEntity) -> UUID: ...
 
 
 class QuestionReader(Protocol):
@@ -47,7 +47,7 @@ class CreateAnswerUseCase:
                 user_id=cmd.user_id,
                 text=cmd.text,
             )
-            await self.answer_repository.save(entity)
+            await self.answer_repository.add(entity)
             logger.info("Answer created", answer_id=entity.id)
             await self.uow.commit()
             return entity.id

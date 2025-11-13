@@ -6,6 +6,7 @@ from app.application.dtos.question import AnswerResponseDTO, QuestionWithAnswers
 from app.application.use_cases.delete_question_with_answers import DeleteQuestionWithAnswersUseCase
 from app.domain.entities.answer import AnswerEntity
 from app.domain.entities.question import QuestionEntity
+from tests.fakes.fake_uow import FakeUnitOfWork
 
 
 class FakeQuestionWithAnswersDeleter:
@@ -13,9 +14,7 @@ class FakeQuestionWithAnswersDeleter:
         self.question = question
         self.answers = answers
 
-    async def delete_with_answers_by_id(
-        self, id: UUID
-    ) -> tuple[QuestionEntity | None, list[AnswerEntity]]:
+    async def delete(self, id: UUID) -> tuple[QuestionEntity | None, list[AnswerEntity]]:
         return self.question, self.answers
 
 
@@ -41,7 +40,7 @@ class FakeQuestionWithAnswersEntityToDtoMapper:
 
 class TestDeleteQuestionWithAnswersUseCase:
     @pytest.mark.asyncio
-    async def test_delete_question_with_answers_success(self):
+    async def test_delete_question_with_answers_success(self, fake_uow: FakeUnitOfWork):
         question = QuestionEntity(
             id=uuid4(),
             text="What is your favorite color?",
@@ -60,6 +59,7 @@ class TestDeleteQuestionWithAnswersUseCase:
         use_case = DeleteQuestionWithAnswersUseCase(
             question_repository=question_repo,
             question_mapper=mapper,
+            uow=fake_uow,
         )
 
         result = await use_case.execute(question.id)

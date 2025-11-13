@@ -4,13 +4,14 @@ from uuid import UUID, uuid4
 
 import structlog
 
+from app.application.interfaces.uow import UnitOfWorkProtocol
 from app.domain.entities.question import QuestionEntity
 
 logger = structlog.get_logger(__name__)
 
 
 class QuestionWriter(Protocol):
-    async def save(self, entity: QuestionEntity) -> UUID: ...
+    async def add(self, entity: QuestionEntity) -> UUID: ...
 
 
 @dataclass(frozen=True)
@@ -21,13 +22,16 @@ class CreateQuestionCommand:
 @dataclass(frozen=True, slots=True)
 class CreateQuestionUseCase:
     question_repository: QuestionWriter
+    uow: UnitOfWorkProtocol
 
     async def execute(self, cmd: CreateQuestionCommand) -> UUID:
         logger.info("Creating question", text=cmd.text)
-        entity = QuestionEntity(
-            id=uuid4(),
-            text=cmd.text,
-        )
-        await self.question_repository.save(entity)
-        logger.info("Question created", question_id=entity.id)
-        return entity.id
+        async with self.uow:
+            entity = QuestionEntity(
+                id=uuid4(),
+                text=cmd.text,
+            )
+            await self.question_repository.add(entity)
+            logger.info("Question created", question_id=entity.id)
+            await self.uow.commit()
+            return entity.id
