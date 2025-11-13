@@ -9,6 +9,7 @@ from app.application.dtos.question import (
 from app.application.use_cases.get_question_with_answers import GetQuestionWithAnswersUseCase
 from app.domain.entities.answer import AnswerEntity
 from app.domain.entities.question import QuestionEntity
+from tests.fakes.fake_uow import FakeUnitOfWork
 
 
 class FakeQuestionByIdReader:
@@ -49,7 +50,7 @@ class FakeQuestionWithAnswersEntityToDtoMapper:
 
 class TestGetQuestionWithAnswersUseCase:
     @pytest.mark.asyncio
-    async def test_get_question_with_answers_success(self):
+    async def test_get_question_with_answers_success(self, fake_uow: FakeUnitOfWork):
         question = QuestionEntity(
             id=uuid4(),
             text="What is your favorite color?",
@@ -66,6 +67,7 @@ class TestGetQuestionWithAnswersUseCase:
             question_repository=question_repo,
             answer_repository=answer_repo,
             question_mapper=mapper,
+            uow=fake_uow,
         )
 
         result = await use_case.execute(question_id=question.id)
@@ -74,9 +76,10 @@ class TestGetQuestionWithAnswersUseCase:
         assert result.text == question.text
         assert len(result.answers) == 2
         assert isinstance(result.answers[0], AnswerResponseDTO)
+        assert fake_uow.committed
 
     @pytest.mark.asyncio
-    async def test_get_question_with_answers_not_found(self):
+    async def test_get_question_with_answers_not_found(self, fake_uow: FakeUnitOfWork):
         question_repo = FakeQuestionByIdReader()
         answer_repo = FakeAnswersByQuestionIdReader(answers=[])
         mapper = FakeQuestionWithAnswersEntityToDtoMapper()
@@ -85,6 +88,7 @@ class TestGetQuestionWithAnswersUseCase:
             question_repository=question_repo,
             answer_repository=answer_repo,
             question_mapper=mapper,
+            uow=fake_uow,
         )
 
         result = await use_case.execute(question_id=uuid4())

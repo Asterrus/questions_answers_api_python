@@ -6,6 +6,7 @@ from app.application.exceptions import QuestionNotFoundError
 from app.application.use_cases.create_answer import CreateAnswerCommand, CreateAnswerUseCase
 from app.domain.entities.answer import AnswerEntity
 from app.domain.entities.question import QuestionEntity
+from tests.fakes.fake_uow import FakeUnitOfWork
 
 
 class FakeAnswerWriter:
@@ -27,7 +28,7 @@ class FakeQuestionReader:
 
 class TestCreateAnswerUseCase:
     @pytest.mark.asyncio
-    async def test_create_answer_success(self):
+    async def test_create_answer_success(self, fake_uow: FakeUnitOfWork):
         question = QuestionEntity(
             id=uuid4(),
             text="What is your favorite color?",
@@ -38,6 +39,7 @@ class TestCreateAnswerUseCase:
         use_case = CreateAnswerUseCase(
             question_repository=question_repo,
             answer_repository=answer_repo,
+            uow=fake_uow,
         )
 
         cmd = CreateAnswerCommand(
@@ -48,15 +50,17 @@ class TestCreateAnswerUseCase:
         result = await use_case.execute(cmd)
         assert result is not None
         assert len(answer_repo.saved_answers) == 1
+        assert fake_uow.committed
 
     @pytest.mark.asyncio
-    async def test_create_answer_question_not_found(self):
+    async def test_create_answer_question_not_found(self, fake_uow: FakeUnitOfWork):
         question_repo = FakeQuestionReader()
         answer_repo = FakeAnswerWriter()
 
         use_case = CreateAnswerUseCase(
             question_repository=question_repo,
             answer_repository=answer_repo,
+            uow=fake_uow,
         )
 
         cmd = CreateAnswerCommand(
