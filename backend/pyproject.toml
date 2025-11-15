@@ -5,7 +5,7 @@ description = "API-сервис для вопросов и ответов. Pytho
 requires-python = ">=3.13"
 dependencies = [
     "alembic>=1.17.1",
-    "fastapi[standard]>=0.121.1",
+    "fastapi[standard]>=0.121.2",
     "psycopg[binary,pool]>=3.2.12",
     "sqlalchemy>=2.0.44",
     "structlog>=25.5.0",
