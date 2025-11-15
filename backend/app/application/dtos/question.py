@@ -6,12 +6,15 @@ from app.application.dtos.answer import AnswerResponseDTO
 
 
 @dataclass(frozen=True, slots=True)
-class QuestionsListResponseDTO:
+class QuestionsListItemDTO:
     """DTO for retrieving questions."""
 
     id: UUID
     text: str
     created_at: datetime = field(default_factory=lambda: datetime.now(UTC))
+
+
+QuestionsListDTO = list[QuestionsListItemDTO]
 
 
 @dataclass(frozen=True, slots=True)

@@ -54,7 +54,8 @@ class AnswerModel:
         default=lambda: datetime.now(UTC),
         server_default=func.now(),
     )
-    question: Mapped[QuestionModel] = relationship(
+    question: Mapped["QuestionModel"] = relationship(
+        "QuestionModel",
         back_populates="answers",
     )
 

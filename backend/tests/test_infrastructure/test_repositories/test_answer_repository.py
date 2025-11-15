@@ -7,12 +7,12 @@ from app.domain.entities.question import QuestionEntity
 from app.infrastructure.db.mappers.answer_db_mapper import AnswerDbMapper
 from app.infrastructure.db.mappers.question_db_mapper import QuestionDbMapper
 from app.infrastructure.db.repositories.answer import AnswerRepositorySQLAlchemy
-from app.infrastructure.db.repositories.question import QuestionRepositorySQLAlchemy
+from app.infrastructure.db.repositories.question import SQLAlchemyQuestionRepository
 
 
 @pytest.mark.asyncio
 async def test_add_and_get_by_id(session):
-    question_repo = QuestionRepositorySQLAlchemy(session=session, mapper=QuestionDbMapper())
+    question_repo = SQLAlchemyQuestionRepository(session=session, mapper=QuestionDbMapper())
     answer_repo = AnswerRepositorySQLAlchemy(session=session, mapper=AnswerDbMapper())
 
     question_id = uuid.uuid4()
@@ -47,7 +47,7 @@ async def test_get_by_id_not_found(session):
 
 @pytest.mark.asyncio
 async def test_delete(session):
-    question_repo = QuestionRepositorySQLAlchemy(session=session, mapper=QuestionDbMapper())
+    question_repo = SQLAlchemyQuestionRepository(session=session, mapper=QuestionDbMapper())
     answer_repo = AnswerRepositorySQLAlchemy(session=session, mapper=AnswerDbMapper())
 
     question_id = uuid.uuid4()
@@ -72,7 +72,7 @@ async def test_delete(session):
 
 @pytest.mark.asyncio
 async def test_get_by_question_id(session):
-    question_repo = QuestionRepositorySQLAlchemy(session=session, mapper=QuestionDbMapper())
+    question_repo = SQLAlchemyQuestionRepository(session=session, mapper=QuestionDbMapper())
     answer_repo = AnswerRepositorySQLAlchemy(session=session, mapper=AnswerDbMapper())
 
     question_id = uuid.uuid4()

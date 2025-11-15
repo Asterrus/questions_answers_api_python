@@ -4,12 +4,12 @@ import pytest
 
 from app.domain.entities.question import QuestionEntity
 from app.infrastructure.db.mappers.question_db_mapper import QuestionDbMapper
-from app.infrastructure.db.repositories.question import QuestionRepositorySQLAlchemy
+from app.infrastructure.db.repositories.question import SQLAlchemyQuestionRepository
 
 
 @pytest.mark.asyncio
 async def test_add_and_get_by_id(session):
-    repo = QuestionRepositorySQLAlchemy(session=session, mapper=QuestionDbMapper())
+    repo = SQLAlchemyQuestionRepository(session=session, mapper=QuestionDbMapper())
     q_id = uuid.uuid4()
     entity = QuestionEntity(id=q_id, text="What is SQLAlchemy?")
 
@@ -24,7 +24,7 @@ async def test_add_and_get_by_id(session):
 
 @pytest.mark.asyncio
 async def test_get_by_id_not_found(session):
-    repo = QuestionRepositorySQLAlchemy(session=session, mapper=QuestionDbMapper())
+    repo = SQLAlchemyQuestionRepository(session=session, mapper=QuestionDbMapper())
     q_id = uuid.uuid4()
 
     got = await repo.get_by_id(q_id)
@@ -33,7 +33,7 @@ async def test_get_by_id_not_found(session):
 
 @pytest.mark.asyncio
 async def test_delete(session):
-    repo = QuestionRepositorySQLAlchemy(session=session, mapper=QuestionDbMapper())
+    repo = SQLAlchemyQuestionRepository(session=session, mapper=QuestionDbMapper())
     q_id = uuid.uuid4()
     entity = QuestionEntity(id=q_id, text="Test question")
 
@@ -49,7 +49,7 @@ async def test_delete(session):
 
 @pytest.mark.asyncio
 async def test_get_list(session):
-    repo = QuestionRepositorySQLAlchemy(session=session, mapper=QuestionDbMapper())
+    repo = SQLAlchemyQuestionRepository(session=session, mapper=QuestionDbMapper())
     q1 = QuestionEntity(id=uuid.uuid4(), text="Question 1")
     q2 = QuestionEntity(id=uuid.uuid4(), text="Question 2")
 

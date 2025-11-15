@@ -1,33 +1,25 @@
-from fastapi import APIRouter
+from typing import Annotated
+
+import structlog
+from fastapi import APIRouter, Depends
+
+from app.application.use_cases.get_questions import GetQuestionsUseCase
+from app.dependencies import get_questions_to_response_mapper, get_questions_use_case
+from app.representation.api.rest.v1.mappers.questions import QuestionsListDtoToApiMapper
+from app.representation.api.rest.v1.schemas.questions import ListQuestionsResponseSchema
 
 router = APIRouter()
 
 
+logger = structlog.get_logger(__name__)
+
+
 @router.get("/questions/", tags=["questions"])
-async def list_questions():
-    """Возвращает список вопросов"""
-    return []
-
-
-@router.get("/questions/{question_id}", tags=["questions"])
-async def get_question():
-    """Возвращает данные вопроса"""
-    return {}
-
-
-@router.post("/questions/", tags=["questions"])
-async def create_question():
-    """Создает новый вопрос"""
-    return {}
-
-
-@router.put("/questions/{question_id}", tags=["questions"])
-async def update_question():
-    """Обновляет данные вопроса"""
-    return {}
-
-
-@router.delete("/questions/{question_id}", tags=["questions"])
-async def delete_question():
-    """Удаляет вопрос"""
-    return {}
+async def list_questions(
+    use_case: Annotated[GetQuestionsUseCase, Depends(get_questions_use_case)],
+    mapper: Annotated[QuestionsListDtoToApiMapper, Depends(get_questions_to_response_mapper)],
+) -> ListQuestionsResponseSchema:
+    logger.info("Getting list of questions")
+    dto = await use_case.execute()
+    logger.info("List of questions retrieved")
+    return mapper.to_response(dto)

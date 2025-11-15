@@ -12,7 +12,7 @@ from app.infrastructure.db.models.question import QuestionModel
 
 
 @dataclass(frozen=True, slots=True)
-class QuestionRepositorySQLAlchemy:
+class SQLAlchemyQuestionRepository:
     session: AsyncSession
     mapper: QuestionDbMapper
 
