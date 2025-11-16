@@ -1,10 +1,8 @@
-from typing import Annotated
-
 import structlog
-from fastapi import APIRouter, Depends
+from dishka.integrations.fastapi import FromDishka, inject
+from fastapi import APIRouter
 
 from app.application.use_cases.get_questions import GetQuestionsUseCase
-from app.dependencies import get_questions_to_response_mapper, get_questions_use_case
 from app.representation.api.rest.v1.mappers.questions import QuestionsListDtoToApiMapper
 from app.representation.api.rest.v1.schemas.questions import ListQuestionsResponseSchema
 
@@ -15,9 +13,10 @@ logger = structlog.get_logger(__name__)
 
 
 @router.get("/questions/", tags=["questions"])
+@inject
 async def list_questions(
-    use_case: Annotated[GetQuestionsUseCase, Depends(get_questions_use_case)],
-    mapper: Annotated[QuestionsListDtoToApiMapper, Depends(get_questions_to_response_mapper)],
+    use_case: FromDishka[GetQuestionsUseCase],
+    mapper: FromDishka[QuestionsListDtoToApiMapper],
 ) -> ListQuestionsResponseSchema:
     logger.info("Getting list of questions")
     dto = await use_case.execute()
