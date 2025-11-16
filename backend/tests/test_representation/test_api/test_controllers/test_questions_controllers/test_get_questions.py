@@ -6,8 +6,8 @@ from dishka import Provider, Scope, make_async_container, provide
 from dishka.integrations.fastapi import setup_dishka
 from fastapi.testclient import TestClient
 
+from app.app_factory import create_app
 from app.application.use_cases.get_questions import GetQuestionsUseCase
-from app.main import create_app
 from app.representation.api.rest.v1.mappers.questions import QuestionsListDtoToApiMapper
 
 
