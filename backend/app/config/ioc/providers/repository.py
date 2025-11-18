@@ -1,4 +1,4 @@
-from dishka import Provider, Scope, provide
+from dishka import Provider, Scope
 
 from app.application.use_cases.create_question import QuestionWriter
 from app.application.use_cases.get_questions import QuestionListReader

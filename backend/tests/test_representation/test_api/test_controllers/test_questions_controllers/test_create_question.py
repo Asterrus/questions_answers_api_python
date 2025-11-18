@@ -18,23 +18,26 @@ class MockUseCaseProvider(Provider):
         mock_use_case.execute = AsyncMock(return_value=uuid4())
         return mock_use_case
 
+
 @pytest_asyncio.fixture
 async def container():
-    container = make_async_container(
-        MockUseCaseProvider()
-    )
+    container = make_async_container(MockUseCaseProvider())
     yield container
     await container.close()
+
 
 @pytest_asyncio.fixture
 async def use_case(container) -> Mock:
     return await container.get(CreateQuestionUseCase)
+
+
 @pytest.fixture
 def client(container):
     app = create_app()
     setup_dishka(container, app)
     with TestClient(app) as client:
         yield client
+
 
 @pytest.mark.asyncio
 async def test_create_question(client: TestClient, use_case: Mock):

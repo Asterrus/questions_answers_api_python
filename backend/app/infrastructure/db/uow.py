@@ -5,20 +5,19 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 logger = structlog.get_logger(__name__)
 
+
 @dataclass(frozen=True, slots=True, kw_only=True)
-class UnitOfWorkSQLAlchemy:
+class SQLAlchemyUnitOfWork:
     session: AsyncSession
 
-    async def __aenter__(self) -> "UnitOfWorkSQLAlchemy":
+    async def __aenter__(self) -> "SQLAlchemyUnitOfWork":
         logger.debug("Starting database transaction")
         return self
 
     async def __aexit__(self, exc_type, exc_val, exc_tb) -> None:
         if exc_type is not None:
             logger.warning(
-                "Transaction rolled back due to exception: %s - %s",
-                exc_type.__name__,
-                str(exc_val)
+                "Transaction rolled back due to exception: %s - %s", exc_type.__name__, str(exc_val)
             )
             await self.rollback()
         else:

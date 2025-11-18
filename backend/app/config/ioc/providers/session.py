@@ -12,7 +12,6 @@ class SessionProvider(Provider):
 
     @provide
     async def get_engine(self) -> AsyncEngine:
-        print(">>> GET ENGINE CALLED!")
         postgres_user = os.getenv("POSTGRES_USER")
         postgres_password = os.getenv("POSTGRES_PASSWORD")
         postgres_host = os.getenv("POSTGRES_HOST")
@@ -27,7 +26,6 @@ class SessionProvider(Provider):
         self,
         engine: AsyncEngine,
     ) -> AsyncGenerator[AsyncSession]:
-        print(">>> GET SESSION CALLED!")
         session_factory = get_session_factory(engine)
         async with session_factory() as session:
             yield session

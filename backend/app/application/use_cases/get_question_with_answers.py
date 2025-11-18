@@ -8,7 +8,7 @@ from app.application.dtos.question import QuestionWithAnswersResponseDTO
 from app.application.interfaces.mappers import (
     QuestionWithAnswersEntityToDtoMapper,
 )
-from app.application.interfaces.uow import UnitOfWorkProtocol
+from app.application.interfaces.uow import UnitOfWork
 from app.domain.entities.answer import AnswerEntity
 from app.domain.entities.question import QuestionEntity
 
@@ -28,7 +28,7 @@ class GetQuestionWithAnswersUseCase:
     question_repository: QuestionByIdReader
     question_mapper: QuestionWithAnswersEntityToDtoMapper
     answer_repository: AnswersByQuestionIdReader
-    uow: UnitOfWorkProtocol
+    uow: UnitOfWork
 
     async def execute(self, question_id: UUID) -> QuestionWithAnswersResponseDTO | None:
         logger.info("Getting question with answers", question_id=question_id)

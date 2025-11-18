@@ -58,7 +58,7 @@ async def test_get_list(session):
     await session.commit()
 
     result = await repo.get_list()
-    assert len(result) >= 2
+    assert len(result) == 2
     ids = {q.id for q in result}
     assert q1.id in ids
     assert q2.id in ids

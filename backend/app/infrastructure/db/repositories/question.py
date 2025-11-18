@@ -27,7 +27,7 @@ class SQLAlchemyQuestionRepository:
         except SQLAlchemyError as e:
             raise RepositoryRetrievalError(f"Error retrieving Answer: {e}") from e
 
-    async def add(self, entity: QuestionEntity) -> None:
+    async def add(self, entity: QuestionEntity) -> UUID:
         try:
             stmt = select(QuestionModel).where(QuestionModel.id == entity.id)
             result = await self.session.execute(stmt)
@@ -37,6 +37,7 @@ class SQLAlchemyQuestionRepository:
             else:
                 question_model = self.mapper.to_model(entity)
             self.session.add(question_model)
+            return question_model.id
         except SQLAlchemyError as e:
             raise RepositoryAddError(f"Error saving Question: {e}") from e
 

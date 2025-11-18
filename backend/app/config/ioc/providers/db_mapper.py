@@ -1,4 +1,4 @@
-from dishka import Provider, Scope, provide
+from dishka import Provider, Scope
 
 from app.infrastructure.db.mappers.question_db_mapper import QuestionDbMapper
 

@@ -5,7 +5,7 @@ from uuid import UUID, uuid4
 import structlog
 
 from app.application.exceptions import QuestionNotFoundError
-from app.application.interfaces.uow import UnitOfWorkProtocol
+from app.application.interfaces.uow import UnitOfWork
 from app.domain.entities.answer import AnswerEntity
 from app.domain.entities.question import QuestionEntity
 
@@ -31,7 +31,7 @@ class CreateAnswerCommand:
 class CreateAnswerUseCase:
     question_repository: QuestionReader
     answer_repository: AnswerWriter
-    uow: UnitOfWorkProtocol
+    uow: UnitOfWork
 
     async def execute(self, cmd: CreateAnswerCommand) -> UUID:
         logger.info("Creating answer", question_id=cmd.question_id, user_id=cmd.user_id)

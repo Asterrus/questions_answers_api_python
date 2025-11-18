@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 
-from app.representation.api.rest.v1.routes import answers, questions
+from app.representation.api.rest.v1.routes import questions
 
 api_router = APIRouter()
 

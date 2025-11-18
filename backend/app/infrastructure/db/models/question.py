@@ -36,7 +36,7 @@ class QuestionModel:
         server_default=func.now(),
     )
 
-    answers: Mapped[list["AnswerModel"]] = relationship(
+    answers: Mapped[list[AnswerModel]] = relationship(
         "AnswerModel",
         back_populates="question",
         cascade="all, delete-orphan",
