@@ -10,3 +10,7 @@ class QuestionsListItem(BaseModel):
 
 
 ListQuestionsResponseSchema = list[QuestionsListItem]
+
+
+class CreateQuestionRequestSchema(BaseModel):
+    text: str
