@@ -5,3 +5,12 @@ repos:
       - id: ruff
         args: ["--fix"]
       - id: ruff-format
+
+  - repo: local
+    hooks:
+      - id: test
+        name: Run tests
+        entry: make test
+        language: system
+        types: [python]
+        pass_filenames: false
