@@ -22,3 +22,6 @@ build-backend = "hatchling.build"
 
 [tool.ty.src]
 include = ["app", "tests"]
+
+[tool.mypy]
+exclude = ["alembic"]
