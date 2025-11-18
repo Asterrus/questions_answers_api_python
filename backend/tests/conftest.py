@@ -4,9 +4,9 @@ import pytest
 import pytest_asyncio
 from dotenv import load_dotenv
 from sqlalchemy import event
-from sqlalchemy.engine import Transaction
 from sqlalchemy.ext.asyncio import AsyncEngine, async_sessionmaker
 from sqlalchemy.orm import Session as SyncSession
+from sqlalchemy.orm.session import SessionTransaction
 
 from app.application.interfaces.uow import UnitOfWork
 from app.infrastructure.db.models.answer import mapper_registry
@@ -37,7 +37,7 @@ async def prepare_database(engine):
         await conn.run_sync(mapper_registry.metadata.drop_all)
 
 
-async_session_factory = async_sessionmaker(engine, expire_on_commit=False)
+async_session_factory = async_sessionmaker(engine, expire_on_commit=False)  # type: ignore
 
 
 @pytest_asyncio.fixture
@@ -51,7 +51,7 @@ async def session(engine: AsyncEngine):
             await s.begin_nested()
 
             @event.listens_for(s.sync_session, "after_transaction_end")
-            def restart_savepoint(sync_sess: SyncSession, transaction: Transaction):
+            def restart_savepoint(sync_sess: SyncSession, transaction: SessionTransaction):
                 if not transaction.nested:
                     return
                 if sync_sess.is_active and sync_sess.get_transaction() is not None:

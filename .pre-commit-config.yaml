@@ -1,3 +1,7 @@
+
+ci:
+  skip: [ty]
+
 repos:
   - repo: https://github.com/astral-sh/ruff-pre-commit
     rev: v0.14.4
@@ -14,3 +18,11 @@ repos:
         language: system
         types: [python]
         pass_filenames: false
+
+
+  - repo: local
+    hooks:
+      - id: ty
+        name: ty check
+        entry: make ty_check
+        language: system
