@@ -5,6 +5,7 @@ from dishka.integrations.fastapi import FromDishka, inject
 from fastapi import APIRouter
 
 from app.application.use_cases.create_question import CreateQuestionCommand, CreateQuestionUseCase
+from app.application.use_cases.delete_question_with_answers import DeleteQuestionWithAnswersUseCase
 from app.application.use_cases.get_questions import GetQuestionsUseCase
 from app.representation.api.rest.v1.mappers.questions import QuestionsListDtoToApiMapper
 from app.representation.api.rest.v1.schemas.questions import (
@@ -43,3 +44,16 @@ async def create_question(
     question_id = await use_case.execute(cmd)
     logger.info("Question created")
     return question_id
+
+
+@router.delete("/questions/{id}/", tags=["questions"], status_code=204)
+@inject
+async def delete_question(
+    id: UUID,
+    use_case: FromDishka[DeleteQuestionWithAnswersUseCase],
+) -> None:
+    """удалить вопрос"""
+    logger.info("Deleting question")
+    await use_case.execute(id)
+    logger.info("Question deleted")
+    return None
