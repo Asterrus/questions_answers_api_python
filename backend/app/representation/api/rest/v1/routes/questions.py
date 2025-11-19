@@ -6,10 +6,15 @@ from fastapi import APIRouter
 
 from app.application.use_cases.create_question import CreateQuestionCommand, CreateQuestionUseCase
 from app.application.use_cases.delete_question_with_answers import DeleteQuestionWithAnswersUseCase
+from app.application.use_cases.get_question_with_answers import GetQuestionWithAnswersUseCase
 from app.application.use_cases.get_questions import GetQuestionsUseCase
-from app.representation.api.rest.v1.mappers.questions import QuestionsListDtoToApiMapper
+from app.representation.api.rest.v1.mappers.questions import (
+    QuestionsListDtoToApiMapper,
+    QuestionWithAnswersDtoToApiMapper,
+)
 from app.representation.api.rest.v1.schemas.questions import (
     CreateQuestionRequestSchema,
+    GetQuestionWithAnswersResponseSchema,
     ListQuestionsResponseSchema,
 )
 
@@ -19,7 +24,7 @@ router = APIRouter()
 logger = structlog.get_logger(__name__)
 
 
-@router.get("/questions/", tags=["questions"])
+@router.get("/questions/", tags=["questions"], status_code=200)
 @inject
 async def list_questions(
     use_case: FromDishka[GetQuestionsUseCase],
@@ -57,3 +62,24 @@ async def delete_question(
     await use_case.execute(id)
     logger.info("Question deleted")
     return None
+
+
+@router.get(
+    "/questions/{id}/",
+    tags=["questions"],
+    responses={
+        200: {"description": "Question retrieved successfully"},
+        404: {"description": "Question not found"},
+    },
+)
+@inject
+async def get_question_with_answers(
+    id: UUID,
+    use_case: FromDishka[GetQuestionWithAnswersUseCase],
+    mapper: FromDishka[QuestionWithAnswersDtoToApiMapper],
+) -> GetQuestionWithAnswersResponseSchema:
+    """получить вопрос с ответами"""
+    logger.info("Getting question with answers")
+    dto = await use_case.execute(id)
+    logger.info("Question with answers retrieved")
+    return mapper.to_response(dto)

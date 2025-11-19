@@ -4,7 +4,7 @@ from uuid import UUID, uuid4
 
 import structlog
 
-from app.application.exceptions import QuestionNotFoundError
+from app.application.exceptions import QuestionNotFound
 from app.application.interfaces.uow import UnitOfWork
 from app.domain.entities.answer import AnswerEntity
 from app.domain.entities.question import QuestionEntity
@@ -39,7 +39,7 @@ class CreateAnswerUseCase:
             question = await self.question_repository.get_by_id(cmd.question_id)
             if question is None:
                 logger.error("Question not found", question_id=cmd.question_id)
-                raise QuestionNotFoundError(f"Question with id {cmd.question_id} not found.")
+                raise QuestionNotFound(f"Question with id {cmd.question_id} not found.")
 
             entity = AnswerEntity(
                 id=uuid4(),

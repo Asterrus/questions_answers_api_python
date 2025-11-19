@@ -25,7 +25,7 @@ class AnswerRepositorySQLAlchemy:
                 return None
             return self.mapper.to_entity(answer_model)
         except SQLAlchemyError as e:
-            raise RepositoryRetrievalError(f"Error retrieving Answer: {e}") from e
+            raise RepositoryRetrievalError(f"Error retrieving Answer: {e}")
 
     async def add(self, entity: AnswerEntity) -> None:
         try:
@@ -38,7 +38,7 @@ class AnswerRepositorySQLAlchemy:
                 answer_model = self.mapper.to_model(entity)
             self.session.add(answer_model)
         except SQLAlchemyError as e:
-            raise RepositoryAddError(f"Error saving Answer: {e}") from e
+            raise RepositoryAddError(f"Error saving Answer: {e}")
 
     async def delete(self, id: UUID) -> None:
         stmt = delete(AnswerModel).where(AnswerModel.id == id)
@@ -51,4 +51,4 @@ class AnswerRepositorySQLAlchemy:
             answer_models = result.scalars().all()
             return [self.mapper.to_entity(answer_model) for answer_model in answer_models]
         except SQLAlchemyError as e:
-            raise RepositoryRetrievalError(f"Error retrieving list of Answers: {e}") from e
+            raise RepositoryRetrievalError(f"Error retrieving list of Answers: {e}")

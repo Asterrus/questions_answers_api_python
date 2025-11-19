@@ -28,6 +28,9 @@ build-backend = "hatchling.build"
 [tool.ty.src]
 include = ["app", "tests"]
 
+[tool.ty.rules]
+unknown-argument = "ignore"
+
 [tool.mypy]
 exclude = ["alembic"]
 

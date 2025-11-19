@@ -18,10 +18,18 @@ if TYPE_CHECKING:
 class QuestionModel:
     __tablename__ = "questions"
 
-    def __init__(self, *, id: UUID, text: str, created_at: datetime) -> None:
+    def __init__(
+        self,
+        *,
+        id: UUID,
+        text: str,
+        created_at: datetime,
+        answers: list[AnswerModel],
+    ) -> None:
         self.id = id
         self.text = text
         self.created_at = created_at
+        self.answers = answers
 
     id: Mapped[UUID] = mapped_column(
         PGUUID(as_uuid=True),
@@ -43,4 +51,4 @@ class QuestionModel:
     )
 
     def __repr__(self) -> str:
-        return f"QuestionModel(id={self.id!r}, text={self.text!r}, created_at={self.created_at!r})"
+        return f"QuestionModel(id={self.id!r}, text={self.text!r}, created_at={self.created_at!r}, answers={self.answers!r})"

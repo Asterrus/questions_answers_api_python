@@ -7,7 +7,7 @@ from app.application.use_cases.get_questions import GetQuestionsUseCase
 from app.domain.entities.question import QuestionEntity
 
 
-class FakeQuestionReader:
+class FakeQuestionsListReader:
     async def get_list(self):
         return [
             QuestionEntity(id=uuid4(), text="What is your name?"),
@@ -22,7 +22,7 @@ class FakeQuestionMapper:
 class TestGetQuestions:
     @pytest.mark.asyncio
     async def test_get_questions_success(self):
-        repo = FakeQuestionReader()
+        repo = FakeQuestionsListReader()
         mapper = FakeQuestionMapper()
         use_case = GetQuestionsUseCase(
             question_repository=repo,

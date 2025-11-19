@@ -7,6 +7,7 @@ from dishka.integrations.fastapi import setup_dishka
 from fastapi import FastAPI
 
 from app.config.ioc.main import get_providers
+from app.representation.api.rest.error_handling import setup_exception_handlers
 from app.representation.api.rest.v1.routes.answers import router as answers_router
 from app.representation.api.rest.v1.routes.questions import router as questions_router
 
@@ -31,4 +32,5 @@ def create_production_app() -> FastAPI:
     app = create_app()
     container = make_async_container(*get_providers())
     setup_dishka(container, app)
+    setup_exception_handlers(app)
     return app

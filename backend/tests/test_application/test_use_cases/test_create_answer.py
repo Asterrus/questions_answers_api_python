@@ -2,7 +2,7 @@ from uuid import UUID, uuid4
 
 import pytest
 
-from app.application.exceptions import QuestionNotFoundError
+from app.application.exceptions import QuestionNotFound
 from app.application.use_cases.create_answer import CreateAnswerCommand, CreateAnswerUseCase
 from app.domain.entities.answer import AnswerEntity
 from app.domain.entities.question import QuestionEntity
@@ -68,5 +68,5 @@ class TestCreateAnswerUseCase:
             user_id=uuid4(),
             text="Blue",
         )
-        with pytest.raises(QuestionNotFoundError):
+        with pytest.raises(QuestionNotFound):
             await use_case.execute(cmd)
