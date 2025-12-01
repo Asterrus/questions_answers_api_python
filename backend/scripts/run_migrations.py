@@ -9,6 +9,8 @@ from time import sleep
 from sqlalchemy import text
 from sqlalchemy.ext.asyncio import create_async_engine
 
+from app.infrastructure.db.config import get_database_url
+
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
@@ -34,16 +36,7 @@ async def wait_for_db(database_url: str, max_retries: int = 30) -> None:
 
 def main() -> None:
     """Run migrations."""
-    # Get database URL from environment
-    database_url = os.getenv("DATABASE_URL")
-    if not database_url:
-        # Construct from individual env vars
-        postgres_user = os.getenv("POSTGRES_USER", "postgres")
-        postgres_password = os.getenv("POSTGRES_PASSWORD", "postgres")
-        postgres_db = os.getenv("POSTGRES_DB", "postgres")
-        postgres_host = os.getenv("POSTGRES_HOST", "db")
-        postgres_port = os.getenv("POSTGRES_PORT", "5432")
-        database_url = f"postgresql+psycopg://{postgres_user}:{postgres_password}@{postgres_host}:{postgres_port}/{postgres_db}"
+    database_url = get_database_url()
 
     logger.info("Waiting for database to be ready...")
     asyncio.run(wait_for_db(database_url))

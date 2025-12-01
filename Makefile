@@ -1,7 +1,20 @@
 .PHONY: test
 
-test:
-	cd backend && uv run pytest -q
+
+test-env-up:
+	@echo "Starting test environment..."
+	docker compose -f docker-compose.test.yaml up -d --build
+
+run-tests:
+	@echo "Running tests..."
+	bash -c 'trap "docker compose -f docker-compose.test.yaml down" EXIT; \
+		( cd backend && uv run pytest -q tests/ )'
+
+test-env-down:
+	@echo "Cleaning up test environment..."
+	docker compose -f docker-compose.test.yaml down -v
+
+test: test-env-up run-tests test-env-down
 
 .PHONY: ty_check
 ty_check:

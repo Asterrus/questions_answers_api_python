@@ -7,7 +7,7 @@ from tests.fakes.fake_uow import FakeUnitOfWork
 
 
 class FakeQuestionWithAnswersDeleter:
-    def __init__(self):
+    def __init__(self) -> None:
         self.deleted_id: UUID | None = None
 
     async def delete(self, id: UUID) -> None:

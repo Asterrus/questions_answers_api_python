@@ -9,7 +9,7 @@ from tests.fakes.fake_uow import FakeUnitOfWork
 
 
 class FakeQuestionReader:
-    def __init__(self):
+    def __init__(self) -> None:
         self.saved_entity: QuestionEntity | None = None
 
     async def add(self, entity: QuestionEntity) -> UUID:

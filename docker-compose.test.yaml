@@ -1,0 +1,15 @@
+name: qa_test
+services:
+  db_test:
+    image: postgres:18-alpine
+    container_name: questions_answers_db_test
+    restart: always
+    env_file:
+      - .env.test
+    ports:
+      - "5434:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 3s
+      timeout: 3s
+      retries: 5
