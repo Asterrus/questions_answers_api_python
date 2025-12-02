@@ -23,4 +23,10 @@ async def test_crud_answers(client: TestClient):
     data = {"text": "test"}
     response = client.post(f"questions/{question_id}/answers/", json=data)
     assert response.status_code == 201
+    answer_id = response.json()
+
+    # get answer
+    response = client.get(f"/answers/{answer_id}")
+    assert response.status_code == 200
+
     # TODO Удалить вопросы / ответы в конце

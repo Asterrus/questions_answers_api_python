@@ -1,5 +1,6 @@
 from dishka import Provider, Scope
 
+from app.representation.api.rest.v1.mappers.answers import AnswerDtoToApiMapper
 from app.representation.api.rest.v1.mappers.questions import (
     QuestionsListDtoToApiMapper,
     QuestionWithAnswersDtoToApiMapper,
@@ -8,3 +9,4 @@ from app.representation.api.rest.v1.mappers.questions import (
 request_mapper_provider = Provider(scope=Scope.REQUEST)
 request_mapper_provider.provide(QuestionsListDtoToApiMapper)
 request_mapper_provider.provide(QuestionWithAnswersDtoToApiMapper)
+request_mapper_provider.provide(AnswerDtoToApiMapper)
