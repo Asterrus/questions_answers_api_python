@@ -1,5 +1,6 @@
 from dishka import Provider, Scope
 
+from app.application.use_cases.create_answer import CreateAnswerUseCase
 from app.application.use_cases.create_question import CreateQuestionUseCase
 from app.application.use_cases.delete_question_with_answers import DeleteQuestionWithAnswersUseCase
 from app.application.use_cases.get_question_with_answers import GetQuestionWithAnswersUseCase
@@ -10,3 +11,4 @@ use_case_provider.provide(GetQuestionsUseCase)
 use_case_provider.provide(CreateQuestionUseCase)
 use_case_provider.provide(DeleteQuestionWithAnswersUseCase)
 use_case_provider.provide(GetQuestionWithAnswersUseCase)
+use_case_provider.provide(CreateAnswerUseCase)

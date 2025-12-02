@@ -27,8 +27,6 @@ async def question_repository(session):
 class TestGetQuestions:
     @pytest.mark.asyncio
     async def test_get_questions_success(self, session, question_repository):
-        mapper = QuestionEntityToDtoMapper()
-
         question = QuestionModel(
             id=uuid4(), text="Test question", created_at=datetime.now(UTC), answers=[]
         )
@@ -37,7 +35,7 @@ class TestGetQuestions:
 
         use_case = GetQuestionsUseCase(
             question_repository=question_repository,
-            question_mapper=mapper,
+            question_mapper=QuestionEntityToDtoMapper(),
         )
 
         result = await use_case.execute()

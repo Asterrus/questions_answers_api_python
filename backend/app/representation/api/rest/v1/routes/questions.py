@@ -24,7 +24,11 @@ router = APIRouter()
 logger = structlog.get_logger(__name__)
 
 
-@router.get("/questions/", tags=["questions"], status_code=200)
+@router.get(
+    "/questions/",
+    tags=["questions"],
+    status_code=200,
+)
 @inject
 async def list_questions(
     use_case: FromDishka[GetQuestionsUseCase],
@@ -37,7 +41,11 @@ async def list_questions(
     return mapper.to_response(dto)
 
 
-@router.post("/questions/", tags=["questions"], status_code=201)
+@router.post(
+    "/questions/",
+    tags=["questions"],
+    status_code=201,
+)
 @inject
 async def create_question(
     request: CreateQuestionRequestSchema,
@@ -51,7 +59,11 @@ async def create_question(
     return question_id
 
 
-@router.delete("/questions/{id}/", tags=["questions"], status_code=204)
+@router.delete(
+    "/questions/{id}/",
+    tags=["questions"],
+    status_code=204,
+)
 @inject
 async def delete_question(
     id: UUID,

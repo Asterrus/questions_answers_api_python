@@ -1,13 +1,18 @@
 from dishka import Provider, Scope
 
+from app.application.use_cases.create_answer import AnswerWriter, QuestionReader
 from app.application.use_cases.create_question import QuestionWriter
 from app.application.use_cases.delete_question_with_answers import QuestionWithAnswersDeleter
 from app.application.use_cases.get_question_with_answers import QuestionWithAnswersReaderById
 from app.application.use_cases.get_questions import QuestionListReader
+from app.infrastructure.db.repositories.answer import AnswerRepositorySQLAlchemy
 from app.infrastructure.db.repositories.question import SQLAlchemyQuestionRepository
 
 repository_provider = Provider(scope=Scope.REQUEST)
 repository_provider.provide(SQLAlchemyQuestionRepository, provides=QuestionListReader)
 repository_provider.provide(SQLAlchemyQuestionRepository, provides=QuestionWriter)
+repository_provider.provide(SQLAlchemyQuestionRepository, provides=QuestionReader)
 repository_provider.provide(SQLAlchemyQuestionRepository, provides=QuestionWithAnswersDeleter)
 repository_provider.provide(SQLAlchemyQuestionRepository, provides=QuestionWithAnswersReaderById)
+
+repository_provider.provide(AnswerRepositorySQLAlchemy, provides=AnswerWriter)
