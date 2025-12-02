@@ -2,6 +2,7 @@ import pytest
 from fastapi.testclient import TestClient
 
 from app.app_factory import create_production_app
+from app.application.exceptions import AnswerNotFound
 
 
 @pytest.fixture
@@ -11,7 +12,6 @@ def client():
         yield c
 
 
-@pytest.mark.skip("Не будет работать пока не буду удалять вопросы/ответы в конце")
 @pytest.mark.asyncio
 async def test_crud_answers(client: TestClient):
     # create question
@@ -29,4 +29,14 @@ async def test_crud_answers(client: TestClient):
     response = client.get(f"/answers/{answer_id}")
     assert response.status_code == 200
 
-    # TODO Удалить вопросы / ответы в конце
+    # delete answer
+    response = client.delete(f"/answers/{answer_id}")
+    assert response.status_code == 204
+
+    with pytest.raises(AnswerNotFound):
+        response = client.get(f"/answers/{answer_id}")
+        assert response.status_code == 200
+
+    # delete question
+    delete_resp = client.delete(f"/questions/{question_id}")
+    assert delete_resp.status_code == 204

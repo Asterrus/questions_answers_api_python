@@ -2,6 +2,7 @@ from dishka import Provider, Scope
 
 from app.application.use_cases.create_answer import AnswerWriter, QuestionReader
 from app.application.use_cases.create_question import QuestionWriter
+from app.application.use_cases.delete_answer import AnswerDeleter
 from app.application.use_cases.delete_question_with_answers import QuestionWithAnswersDeleter
 from app.application.use_cases.get_answer import AnswerByIdReader
 from app.application.use_cases.get_question_with_answers import QuestionWithAnswersReaderById
@@ -18,3 +19,4 @@ repository_provider.provide(SQLAlchemyQuestionRepository, provides=QuestionWithA
 
 repository_provider.provide(AnswerRepositorySQLAlchemy, provides=AnswerWriter)
 repository_provider.provide(AnswerRepositorySQLAlchemy, provides=AnswerByIdReader)
+repository_provider.provide(AnswerRepositorySQLAlchemy, provides=AnswerDeleter)
