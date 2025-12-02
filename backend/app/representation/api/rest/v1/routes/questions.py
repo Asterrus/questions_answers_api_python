@@ -8,10 +8,6 @@ from app.application.use_cases.create_question import CreateQuestionCommand, Cre
 from app.application.use_cases.delete_question_with_answers import DeleteQuestionWithAnswersUseCase
 from app.application.use_cases.get_question_with_answers import GetQuestionWithAnswersUseCase
 from app.application.use_cases.get_questions import GetQuestionsUseCase
-from app.representation.api.rest.v1.mappers.questions import (
-    QuestionsListDtoToApiMapper,
-    QuestionWithAnswersDtoToApiMapper,
-)
 from app.representation.api.rest.v1.schemas.questions import (
     CreateQuestionRequestSchema,
     GetQuestionWithAnswersResponseSchema,
@@ -32,13 +28,12 @@ logger = structlog.get_logger(__name__)
 @inject
 async def list_questions(
     use_case: FromDishka[GetQuestionsUseCase],
-    mapper: FromDishka[QuestionsListDtoToApiMapper],
 ) -> ListQuestionsResponseSchema:
     """список всех вопросов"""
     logger.info("Getting list of questions")
     dto = await use_case.execute()
     logger.info("List of questions retrieved")
-    return mapper.to_response(dto)
+    return ListQuestionsResponseSchema.from_dto(dto)
 
 
 @router.post(
@@ -88,10 +83,9 @@ async def delete_question(
 async def get_question_with_answers(
     id: UUID,
     use_case: FromDishka[GetQuestionWithAnswersUseCase],
-    mapper: FromDishka[QuestionWithAnswersDtoToApiMapper],
 ) -> GetQuestionWithAnswersResponseSchema:
     """получить вопрос с ответами"""
     logger.info("Getting question with answers")
     dto = await use_case.execute(id)
     logger.info("Question with answers retrieved")
-    return mapper.to_response(dto)
+    return GetQuestionWithAnswersResponseSchema.from_dto(dto)

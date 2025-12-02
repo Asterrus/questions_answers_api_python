@@ -8,7 +8,6 @@ from fastapi.testclient import TestClient
 
 from app.app_factory import create_app
 from app.application.use_cases.get_questions import GetQuestionsUseCase
-from app.representation.api.rest.v1.mappers.questions import QuestionsListDtoToApiMapper
 
 
 class MockUseCaseProvider(Provider):
@@ -19,19 +18,9 @@ class MockUseCaseProvider(Provider):
         return mock_use_case
 
 
-class MockQuestionsListDtoToApiMapperProvider(Provider):
-    @provide(scope=Scope.APP)
-    def get_mapper(self) -> QuestionsListDtoToApiMapper:
-        mock_mapper = Mock()
-        mock_mapper.to_response = Mock(return_value=[])
-        return mock_mapper
-
-
 @pytest_asyncio.fixture
 async def container():
-    container = make_async_container(
-        MockUseCaseProvider(), MockQuestionsListDtoToApiMapperProvider()
-    )
+    container = make_async_container(MockUseCaseProvider())
     yield container
     await container.close()
 
@@ -49,14 +38,8 @@ async def use_case(container) -> Mock:
     return await container.get(GetQuestionsUseCase)
 
 
-@pytest_asyncio.fixture
-async def mapper(container) -> Mock:
-    return await container.get(QuestionsListDtoToApiMapper)
-
-
 @pytest.mark.asyncio
-async def test_get_questions(client: TestClient, use_case: Mock, mapper: Mock):
+async def test_get_questions(client: TestClient, use_case: Mock):
     response = client.get("/questions/")
     assert response.status_code == 200
     use_case.execute.assert_called_once()
-    mapper.to_response.assert_called_once()

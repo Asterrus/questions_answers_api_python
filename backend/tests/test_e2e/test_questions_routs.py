@@ -22,14 +22,17 @@ async def test_crud_questions(client: TestClient):
     response = client.get("/questions/")
 
     assert response.status_code == 200
-    data = response.json()
-    assert isinstance(data, list)
-    assert any(item["id"] == created_id and item["text"] == "Test question" for item in data)
+    data: dict = response.json()
+    assert isinstance(data, dict)
+    assert isinstance(data["questions"], list)
+    assert any(
+        item["id"] == created_id and item["text"] == "Test question" for item in data["questions"]
+    )
 
     # get question with answers
     response = client.get(f"/questions/{created_id}")
     assert response.status_code == 200
-    data = response.json()
+    data: dict = response.json()
     assert isinstance(data, dict)
     assert data["id"] == created_id
     assert data["text"] == "Test question"
@@ -43,6 +46,7 @@ async def test_crud_questions(client: TestClient):
     # get questions
     response = client.get("/questions/")
     assert response.status_code == 200
-    data = response.json()
-    assert isinstance(data, list)
-    assert not any(item["id"] == created_id and item["text"] == "Test question" for item in data)
+    data: dict = response.json()
+    assert not any(
+        item["id"] == created_id and item["text"] == "Test question" for item in data["questions"]
+    )

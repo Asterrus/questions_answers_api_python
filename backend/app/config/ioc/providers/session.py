@@ -8,15 +8,13 @@ from app.infrastructure.db.session import create_engine, get_session_factory
 
 
 class SessionProvider(Provider):
-    scope = Scope.REQUEST
-
-    @provide
+    @provide(scope=Scope.APP)
     async def get_engine(self) -> AsyncEngine:
         database_url = get_database_url()
         engine: AsyncEngine = create_engine(database_url, is_echo=True)
         return engine
 
-    @provide
+    @provide(scope=Scope.REQUEST)
     async def get_session(
         self,
         engine: AsyncEngine,

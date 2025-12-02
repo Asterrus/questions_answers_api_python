@@ -7,7 +7,6 @@ from fastapi import APIRouter
 from app.application.use_cases.create_answer import CreateAnswerCommand, CreateAnswerUseCase
 from app.application.use_cases.delete_answer import DeleteAnswerUseCase
 from app.application.use_cases.get_answer import GetAnswerUseCase
-from app.representation.api.rest.v1.mappers.answers import AnswerDtoToApiMapper
 from app.representation.api.rest.v1.schemas.answers import (
     CreateAnswerRequestSchema,
     GetAnswerResponseSchema,
@@ -47,12 +46,11 @@ async def create_answer(
 @inject
 async def get_answer(
     use_case: FromDishka[GetAnswerUseCase],
-    mapper: FromDishka[AnswerDtoToApiMapper],
     id: UUID,
 ) -> GetAnswerResponseSchema:
     "получить конкретный ответ"
     answer = await use_case.execute(id)
-    return mapper.to_response(answer)
+    return GetAnswerResponseSchema.from_dto(answer)
 
 
 @router.delete(
