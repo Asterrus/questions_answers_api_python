@@ -2,7 +2,6 @@ import pytest
 from fastapi.testclient import TestClient
 
 from app.app_factory import create_production_app
-from app.application.exceptions import AnswerNotFound
 
 
 @pytest.fixture
@@ -33,9 +32,9 @@ async def test_crud_answers(client: TestClient):
     response = client.delete(f"/answers/{answer_id}")
     assert response.status_code == 204
 
-    with pytest.raises(AnswerNotFound):
-        response = client.get(f"/answers/{answer_id}")
-        assert response.status_code == 200
+    # check answer deleted
+    response = client.get(f"/answers/{answer_id}")
+    assert response.status_code == 404
 
     # delete question
     delete_resp = client.delete(f"/questions/{question_id}")
